@@ -34,8 +34,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   List<MediaModel> imageList = <MediaModel>[];
   late int _currIndex;
   late Animation<double> animation;
-  late AnimationController _animationController;
-  late AnimationController controller;
+  late AnimationController? _animationController;
   late Animation<double> scaleAnimation;
 
   hasCapturesAllImages(){
@@ -48,7 +47,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
         imageList.add(
             MediaModel.blob(file, "", file.readAsBytesSync()));
       }
-      _animationController.stop();
+      _animationController?.stop();
       Navigator.pop(context, imageList);
     }
   }
@@ -59,9 +58,9 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
           vsync: this, duration: const Duration(milliseconds: 1500));
       animation = Tween<double>(begin: 400, end: 1).animate(scaleAnimation =
           CurvedAnimation(
-              parent: _animationController, curve: Curves.elasticOut))
+              parent: _animationController!, curve: Curves.elasticOut))
         ..addListener(() {});
-      _animationController.forward();
+      _animationController!.forward();
       HapticFeedback.lightImpact();
     },);
   }
@@ -409,11 +408,8 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    if (_controller != null) {
-      _controller!.dispose();
-    } else {
-      _animationController.dispose();
-    }
+    _controller?.dispose();
+    _animationController?.dispose();
 
     super.dispose();
   }
