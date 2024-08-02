@@ -42,7 +42,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   List<MediaModel> imageList = <MediaModel>[];
   late int _currIndex;
   late Animation<double> animation;
-  late AnimationController? _animationController;
+  AnimationController? _animationController;
   late Animation<double> scaleAnimation;
 
   FlashMode flashMode = FlashMode.off;
@@ -90,9 +90,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   removeImage() {
-    setState(() {
       imageFiles.removeLast();
-    });
   }
 
   Widget? _animatedButton({Widget? customContent}) {
@@ -342,7 +340,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-              )
+              ),
             ])));
   }
 
