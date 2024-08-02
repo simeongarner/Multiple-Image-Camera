@@ -37,7 +37,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   late AnimationController? _animationController;
   late Animation<double> scaleAnimation;
 
-  hasCapturesAllImages(){
+  hasCapturedAllImages(){
     if (widget.maxPictures == null){
       return null;
     }
@@ -69,7 +69,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
     setState(() {
       imageFiles.add(image);
     });
-    hasCapturesAllImages();
+    hasCapturedAllImages();
   }
 
   removeImage() {
