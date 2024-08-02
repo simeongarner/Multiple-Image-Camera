@@ -7,15 +7,17 @@ import 'package:multiple_image_camera/image_preview.dart';
 
 class CameraFile extends StatefulWidget {
   final Widget? doneButton;
-  final Widget? rotateCameraIcon;
+  final Widget? bottomLeftButton;
   final ButtonStyle? backButtonStyle;
   final Icon? cancelIcon;
   final int? maxPictures;
   final bool? flashIcon;
+  final double? bottomLeftSize;
   const CameraFile({
     super.key,
     this.doneButton,
-    this.rotateCameraIcon,
+    this.bottomLeftButton,
+    this.bottomLeftSize,
     this.backButtonStyle,
     this.cancelIcon,
     this.maxPictures,
@@ -237,15 +239,17 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
               Positioned(
                 right:
                     MediaQuery.of(context).orientation == Orientation.portrait
-                        ? 340
+                        ? widget.bottomLeftSize == null ? 340 : MediaQuery.of(context).size.width - widget.bottomLeftSize!
                         : null,
+                top: widget.bottomLeftSize == null ? null : MediaQuery.of(context).size.height - widget.bottomLeftSize!,
                 bottom: 0,
                 left: 0,
                 child: IconButton(
-                  iconSize: 40,
-                  icon: (widget.rotateCameraIcon != null) ? widget.rotateCameraIcon! : const Icon(
+                  iconSize: widget.bottomLeftSize ?? 40,
+                  icon: (widget.bottomLeftButton != null) ? widget.bottomLeftButton! : Icon(
                     Icons.camera_front,
                     color: Colors.white,
+                    size: widget.bottomLeftSize,
                   ),
                   onPressed: _onCameraSwitch,
                 ),
