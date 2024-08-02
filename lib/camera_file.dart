@@ -8,6 +8,7 @@ import 'package:multiple_image_camera/image_preview.dart';
 class CameraFile extends StatefulWidget {
   final Widget? doneButton;
   final Widget? bottomLeftButton;
+  final List<Widget>? centerWidgets;
   final ButtonStyle? backButtonStyle;
   final Icon? removeImageIcon;
   final Icon? cancelIcon;
@@ -18,6 +19,7 @@ class CameraFile extends StatefulWidget {
     super.key,
     this.doneButton,
     this.bottomLeftButton,
+    this.centerWidgets, 
     this.bottomLeftSize,
     this.backButtonStyle,
     this.removeImageIcon,
@@ -408,6 +410,11 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
               ),
               onPressed: () => Navigator.pop(context, imageList),
             ),
+            Flexible(child: Container()),
+            Row(
+              children: widget.centerWidgets != null ? widget.centerWidgets! : [],
+            ),
+            Flexible(child: Container()),
             (widget.flashIcon == true) ? IconButton(
               iconSize: 50,
               icon: Icon(
