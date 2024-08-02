@@ -9,6 +9,7 @@ class CameraFile extends StatefulWidget {
   final Widget? doneButton;
   final Widget? bottomLeftButton;
   final ButtonStyle? backButtonStyle;
+  final Icon? removeImageIcon;
   final Icon? cancelIcon;
   final int? maxPictures;
   final bool? flashIcon;
@@ -19,6 +20,7 @@ class CameraFile extends StatefulWidget {
     this.bottomLeftButton,
     this.bottomLeftSize,
     this.backButtonStyle,
+    this.removeImageIcon,
     this.cancelIcon,
     this.maxPictures,
     this.flashIcon,
@@ -199,10 +201,10 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                                   removeImage();
                                                 });
                                               },
-                                              child: (widget.cancelIcon != null) ? widget.cancelIcon : const Icon(
+                                              child: (widget.removeImageIcon != null) ? widget.removeImageIcon : const Icon(
                                                 Icons.cancel,
                                                 color: Colors.white,
-                                                size: 35,
+                                                size: 40,
                                               ),
                                             ),
                                           )
