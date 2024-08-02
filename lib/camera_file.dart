@@ -90,7 +90,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   removeImage() {
-      imageFiles.removeLast();
+    imageFiles.removeLast();
   }
 
   Widget? _animatedButton({Widget? customContent}) {
