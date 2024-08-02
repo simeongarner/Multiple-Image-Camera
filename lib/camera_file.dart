@@ -11,10 +11,10 @@ class CameraFile extends StatefulWidget {
   final List<Widget>? centerWidgets;
   final ButtonStyle? backButtonStyle;
   final Icon? removeImageIcon;
-  final Icon? cancelIcon;
   final int? maxPictures;
   final bool? flashIcon;
   final double? bottomLeftSize;
+  final Function(int)? onCapture;
   const CameraFile({
     super.key,
     this.doneButton,
@@ -23,9 +23,9 @@ class CameraFile extends StatefulWidget {
     this.bottomLeftSize,
     this.backButtonStyle,
     this.removeImageIcon,
-    this.cancelIcon,
     this.maxPictures,
     this.flashIcon,
+    this.onCapture,
   });
 
   @override
@@ -85,9 +85,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   addImages(XFile image) {
-    setState(() {
-      imageFiles.add(image);
-    });
+    imageFiles.add(image);
     hasCapturedAllImages();
   }
 
@@ -201,6 +199,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                               onTap: () {
                                                 setState(() {
                                                   removeImage();
+                                                  widget.onCapture?.call(imageFiles.length);
                                                 });
                                               },
                                               child: (widget.removeImageIcon != null) ? widget.removeImageIcon : const Icon(
@@ -377,6 +376,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
       setState(() {
         addImages(image);
         HapticFeedback.lightImpact();
+        widget.onCapture?.call(imageFiles.length);
       });
     } on CameraException {
       return null;
