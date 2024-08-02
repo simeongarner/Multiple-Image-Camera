@@ -170,6 +170,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                 ? ScaleTransition(
                                     scale: scaleAnimation,
                                     child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -182,34 +183,42 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                                           "",
                                                         )));
                                       },
-                                      child: Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          Image.file(
-                                            File(
-                                              imageFiles[index].path,
-                                            ),
-                                            height: 90,
-                                            width: 60,
-                                          ),
-                                          Positioned(
-                                            top: -17,
-                                            right: -15,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  removeImage();
-                                                  widget.onCapture?.call(imageFiles.length);
-                                                });
-                                              },
-                                              child: (widget.removeImageIcon != null) ? widget.removeImageIcon : const Icon(
-                                                Icons.cancel,
-                                                color: Colors.white,
-                                                size: 40,
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: widget.bottomLeftSize != null ? widget.bottomLeftSize!/2 : 40, left: 15),
+                                        width: 77,
+                                        height: 105,
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 15),
+                                              child: Image.file(
+                                                File(
+                                                  imageFiles[index].path,
+                                                ),
+                                                height: 90 ,
+                                                width: 60,
                                               ),
                                             ),
-                                          )
-                                        ],
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    removeImage();
+                                                    widget.onCapture?.call(imageFiles.length);
+                                                  });
+                                                },
+                                                child: (widget.removeImageIcon != null) ? widget.removeImageIcon : const Icon(
+                                                  Icons.cancel,
+                                                  color: Colors.white,
+                                                  size: 40,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )
@@ -442,6 +451,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
               : const SizedBox(width: 8.0,)
           ],
         ),
+        leadingWidth: double.infinity,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
