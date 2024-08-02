@@ -6,11 +6,15 @@ import 'package:multiple_image_camera/camera_file.dart';
 class MultipleImageCamera {
   static Future<List<MediaModel>> capture({
     required BuildContext context,
-    Widget? customDoneButton,
-    Widget? rotateCameraIcon,
+    Widget? doneButton,
+    Widget? bottomLeftButton,
+    List<Widget>? centerWidgets,
     ButtonStyle? backButtonStyle,
-    Icon? cancelIcon,
+    Icon? removeImageIcon,
     int? maxPictures,
+    double? bottomLeftSize,
+    bool? flashIcon,
+    Function(int)? onCapture,
   }) async {
     List<MediaModel> images = [];
     try {
@@ -18,11 +22,15 @@ class MultipleImageCamera {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>  CameraFile(
-                customButton: customDoneButton,
-                rotateCameraIcon: rotateCameraIcon,
+                doneButton: doneButton,
+                bottomLeftButton: bottomLeftButton,
+                centerWidgets: centerWidgets,
+                bottomLeftSize: bottomLeftSize,
                 backButtonStyle: backButtonStyle,
-                cancelIcon: cancelIcon,
+                removeImageIcon: removeImageIcon,
                 maxPictures: maxPictures,
+                flashIcon: flashIcon,
+                onCapture: onCapture,
               )));
     // ignore: empty_catches
     } catch (e) {
