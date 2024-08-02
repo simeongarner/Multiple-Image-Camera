@@ -6,18 +6,20 @@ import 'package:flutter/services.dart';
 import 'package:multiple_image_camera/image_preview.dart';
 
 class CameraFile extends StatefulWidget {
-  final Widget? customButton;
+  final Widget? doneButton;
   final Widget? rotateCameraIcon;
   final ButtonStyle? backButtonStyle;
   final Icon? cancelIcon;
   final int? maxPictures;
+  final bool? flashIcon;
   const CameraFile({
     super.key,
-    this.customButton,
+    this.doneButton,
     this.rotateCameraIcon,
     this.backButtonStyle,
     this.cancelIcon,
     this.maxPictures,
+    this.flashIcon,
   });
 
   @override
@@ -36,6 +38,17 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController? _animationController;
   late Animation<double> scaleAnimation;
+
+  FlashMode flashMode = FlashMode.off;
+
+  setFlash(){
+    if (this.flashMode == FlashMode.off){
+      this.flashMode = FlashMode.always;
+    }
+    else {
+      this.flashMode = FlashMode.off;
+    }
+  }
 
   hasCapturedAllImages(){
     if (widget.maxPictures == null){
@@ -345,7 +358,14 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
       return null;
     }
     try {
+      if (this.flashMode == FlashMode.off){
+        await _controller!.setFlashMode(FlashMode.off);
+      }
+      else {
+        await _controller!.setFlashMode(FlashMode.torch);
+      }
       final image = await _controller!.takePicture();
+      await _controller!.setFlashMode(FlashMode.off);
       setState(() {
         addImages(image);
         HapticFeedback.lightImpact();
@@ -373,8 +393,26 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        actions: [
-          imageFiles.isNotEmpty
+        leading: Row(
+          children: [
+            BackButton(
+              style: (widget.backButtonStyle != null) ? widget.backButtonStyle : ButtonStyle(
+                iconColor: MaterialStateProperty.all<Color>(Colors.white),
+                iconSize: MaterialStateProperty.all<double>(50)
+              ),
+              onPressed: () => Navigator.pop(context, imageList),
+            ),
+            (widget.flashIcon == true) ? IconButton(
+              iconSize: 50,
+              icon: Icon(
+                (this.flashMode == FlashMode.off) ? Icons.flash_off_rounded : Icons.flash_on_rounded,
+                color: Colors.white,
+              ),
+              onPressed: () => setState(() {
+                setFlash();
+              }),
+            ) : Container(),
+            imageFiles.isNotEmpty
               ? GestureDetector(
                   onTap: () {
                     for (int i = 0; i < imageFiles.length; i++) {
@@ -386,16 +424,10 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: _animatedButton(customContent: widget.customButton),
+                    child: _animatedButton(customContent: widget.doneButton),
                   ))
-              : const SizedBox()
-        ],
-        leading: BackButton(
-          style: (widget.backButtonStyle != null) ? widget.backButtonStyle : ButtonStyle(
-            iconColor: MaterialStateProperty.all<Color>(Colors.white),
-            iconSize: MaterialStateProperty.all<double>(50)
-          ),
-          onPressed: () => Navigator.pop(context, imageList),
+              : const SizedBox(width: 8.0,)
+          ],
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
