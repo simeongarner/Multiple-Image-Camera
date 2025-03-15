@@ -8,6 +8,7 @@ class MultipleImageCamera {
     required BuildContext context,
     Widget? doneButton,
     Widget? bottomLeftButton,
+    Widget? customProgressIndicator,
     List<Widget>? centerWidgets,
     ButtonStyle? backButtonStyle,
     Icon? removeImageIcon,
@@ -24,6 +25,7 @@ class MultipleImageCamera {
               builder: (BuildContext context) =>  CameraFile(
                 doneButton: doneButton,
                 bottomLeftButton: bottomLeftButton,
+                customProgressIndicator: customProgressIndicator,
                 centerWidgets: centerWidgets,
                 bottomLeftSize: bottomLeftSize,
                 backButtonStyle: backButtonStyle,
