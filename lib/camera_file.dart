@@ -8,6 +8,7 @@ import 'package:multiple_image_camera/image_preview.dart';
 class CameraFile extends StatefulWidget {
   final Widget? customButton;
   final Widget? rotateCameraIcon;
+  final Widget? waitingWidget;
   final ButtonStyle? backButtonStyle;
   final Icon? cancelIcon;
   final int? maxPictures;
@@ -15,6 +16,7 @@ class CameraFile extends StatefulWidget {
     super.key,
     this.customButton,
     this.rotateCameraIcon,
+    this.waitingWidget,
     this.backButtonStyle,
     this.cancelIcon,
     this.maxPictures,
@@ -54,6 +56,9 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   runAnimation(){
+    if (_animationController.isAnimating){
+      _animationController.stop();
+    }
     setState(() {
       _animationController = AnimationController(
           vsync: this, duration: const Duration(milliseconds: 1500));
@@ -363,8 +368,8 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
         return Container();
       }
     } else {
-      return const Center(
-        child: SizedBox(
+      return Center(
+        child: widget.waitingWidget ?? const SizedBox(
           width: 32,
           height: 32,
           child: CircularProgressIndicator(),
