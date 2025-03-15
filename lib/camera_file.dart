@@ -8,6 +8,7 @@ import 'package:multiple_image_camera/image_preview.dart';
 class CameraFile extends StatefulWidget {
   final Widget? doneButton;
   final Widget? bottomLeftButton;
+  final Widget? customProgressIndicator;
   final List<Widget>? centerWidgets;
   final ButtonStyle? backButtonStyle;
   final Icon? removeImageIcon;
@@ -19,6 +20,7 @@ class CameraFile extends StatefulWidget {
     super.key,
     this.doneButton,
     this.bottomLeftButton,
+    this.customProgressIndicator,
     this.centerWidgets, 
     this.bottomLeftSize,
     this.backButtonStyle,
@@ -42,7 +44,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   List<MediaModel> imageList = <MediaModel>[];
   late int _currIndex;
   late Animation<double> animation;
-  AnimationController? _animationController;
+  late AnimationController _animationController;
   late Animation<double> scaleAnimation;
 
   FlashMode flashMode = FlashMode.off;
@@ -66,20 +68,23 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
         imageList.add(
             MediaModel.blob(file, "", file.readAsBytesSync()));
       }
-      _animationController?.stop();
+      _animationController.stop();
       Navigator.pop(context, imageList);
     }
   }
 
   runAnimation(){
+    if (_animationController.isAnimating){
+      _animationController.stop();
+    }
     setState(() {
       _animationController = AnimationController(
           vsync: this, duration: const Duration(milliseconds: 1500));
       animation = Tween<double>(begin: 400, end: 1).animate(scaleAnimation =
           CurvedAnimation(
-              parent: _animationController!, curve: Curves.elasticOut))
+              parent: _animationController, curve: Curves.elasticOut))
         ..addListener(() {});
-      _animationController!.forward();
+      _animationController.forward();
       HapticFeedback.lightImpact();
     },);
   }
@@ -116,6 +121,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   Future<void> _initCamera() async {
+    _animationController = AnimationController(vsync: this);
     _cameras = await availableCameras();
     // ignore: unnecessary_null_comparison
     if (_cameras != null) {
@@ -397,8 +403,8 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
         return Container();
       }
     } else {
-      return const Center(
-        child: SizedBox(
+      return Center(
+        child: widget.customProgressIndicator ?? const SizedBox(
           width: 32,
           height: 32,
           child: CircularProgressIndicator(),
@@ -462,7 +468,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   @override
   void dispose() {
     _controller?.dispose();
-    _animationController?.dispose();
+    _animationController.dispose();
 
     super.dispose();
   }
