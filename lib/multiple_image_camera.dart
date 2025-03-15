@@ -8,6 +8,7 @@ class MultipleImageCamera {
     required BuildContext context,
     Widget? customDoneButton,
     Widget? rotateCameraIcon,
+    Widget? waitingWidget,
     ButtonStyle? backButtonStyle,
     Icon? cancelIcon,
     int? maxPictures,
@@ -20,6 +21,7 @@ class MultipleImageCamera {
               builder: (BuildContext context) =>  CameraFile(
                 customButton: customDoneButton,
                 rotateCameraIcon: rotateCameraIcon,
+                waitingWidget: waitingWidget,
                 backButtonStyle: backButtonStyle,
                 cancelIcon: cancelIcon,
                 maxPictures: maxPictures,
